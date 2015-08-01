@@ -5,7 +5,7 @@ RSpec.describe ReservationsController, type: :controller do
   let(:reservation) { reservations(:default) }
 
   it "GET index" do
-    get :index
+    get :index, { from: "#{2.days.ago}", to: "#{3.days.from_now}" }
     expect(response).to render_template(:index)
     expect(assigns(:current_reservations)).to eq([reservation.reserved_at.xmlschema])
   end

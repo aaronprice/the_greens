@@ -1,5 +1,9 @@
+%h1 Reservations
+
+%p Reservations for period: #{@period_from.strftime("%B %-d, %Y")} to #{@period_to.strftime("%B %-d, %Y")}
+
 %table
-  - (Date.today.at_beginning_of_week..Date.today.at_end_of_week).each do |day|
+  - (@period_from.to_date..@period_to.to_date).each do |day|
     %tr
       %th= day.strftime("%A")
       - CalendarService.reservation_intervals(day).each do |time_slot|

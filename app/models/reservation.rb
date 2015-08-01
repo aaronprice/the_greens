@@ -14,16 +14,16 @@ class Reservation < ActiveRecord::Base
 
   # == Scopes ===============================================================
 
-  scope :this_week, -> {
-    where("reservations.reserved_at >= :beginning_of_week AND reservations.reserved_at <= :end_of_week", {
-      beginning_of_week: Time.now.at_beginning_of_week.to_s(:db),
-      end_of_week: Time.now.at_end_of_week.to_s(:db)
-    })
-  }
-
   # == Callbacks ============================================================
 
   # == Class Methods ========================================================
+
+  def self.for_period(from, to)
+    where("reservations.reserved_at >= :from AND reservations.reserved_at <= :to", {
+      from: from.to_s(:db),
+      to: to.to_s(:db)
+    })
+  end
 
   # == Instance Methods =====================================================
 

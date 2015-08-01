@@ -1,9 +1,10 @@
 class ReservationsController < ApplicationController
 
+  before_filter :load_reservation_period, only: [:index]
   before_filter :build_reservation_form, only: [:new, :create]
 
   def index
-    @current_reservations = Reservation.this_week.collect{ |record| record.reserved_at.xmlschema }
+    @current_reservations = Reservation.for_period(@period_from, @period_to).collect{ |record| record.reserved_at.xmlschema }
   end
 
   def new
@@ -29,5 +30,13 @@ private
 
   def allowed_params
     params.permit(reservation_form: [:name, :email, :reserved_at])
+  end
+
+  def load_reservation_period
+    params[:from] ||= Date.today.at_beginning_of_week.to_s
+    params[:to] ||= Date.today.at_end_of_week.to_s
+
+    @period_from = Time.zone.parse(params[:from])
+    @period_to = Time.zone.parse(params[:to])
   end
 end
