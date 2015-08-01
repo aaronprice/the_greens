@@ -1,0 +1,3 @@
+default:
+  name: Default User
+  email: default_user@test.test

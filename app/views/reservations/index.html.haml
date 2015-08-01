@@ -1,0 +1,11 @@
+%table
+  - (Date.today.at_beginning_of_week..Date.today.at_end_of_week).each do |day|
+    %tr
+      %th= day.strftime("%A")
+      - CalendarService.reservation_intervals(day).each do |time_slot|
+        - if @current_reservations.include?(time_slot.xmlschema)
+          %td.reserved= time_slot.strftime("%l:%M%p").downcase
+        - else
+          %td= link_to time_slot.strftime("%l:%M%p").downcase, new_reservation_url(reservation_form: { reserved_at: time_slot } )
+
+

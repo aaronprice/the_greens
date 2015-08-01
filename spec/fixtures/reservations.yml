@@ -1,0 +1,3 @@
+default:
+  user: default
+  reserved_at: <%= t = 2.days.from_now; Time.new(t.year, t.month, t.day, 12, 0, 0) %>

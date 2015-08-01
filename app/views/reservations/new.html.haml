@@ -1,0 +1,12 @@
+%h1 New Reservation
+
+= form_for @reservation_form, as: :reservation_form, url: reservations_path do |f|
+  = f.hidden_field :reserved_at
+
+  = f.label :name
+  = f.text_field :name
+  %br
+  = f.label :email
+  = f.text_field :email
+  %br
+  = f.submit "Reserve Now"
