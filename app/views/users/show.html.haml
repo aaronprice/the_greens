@@ -1,0 +1,18 @@
+%h1 My Reservations
+
+%p Welcome #{current_user.name}
+
+- if current_user.reservations.future.present?
+  %table
+    %tr
+      %th Reservation Booked For
+      %th Actions
+    - current_user.reservations.future.each do |reservation|
+      %tr
+        %td= reservation.reserved_at.strftime("%B %-d, %Y at %l:%M%p")
+        %td= link_to "Delete", user_reservation_path(reservation), method: :delete, data: { confirm: "Are you sure you want to delete this reservation?" }
+
+- else
+  %p
+    You have no upcoming reservations.
+    = link_to "Reserve now", reservations_path
