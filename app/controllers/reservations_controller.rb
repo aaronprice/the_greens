@@ -33,8 +33,8 @@ private
   end
 
   def load_reservation_period
-    params[:from] ||= Date.today.at_beginning_of_week.to_s
-    params[:to] ||= Date.today.at_end_of_week.to_s
+    params[:from] ||= Time.zone.now.at_beginning_of_week.to_s
+    params[:to] ||= Time.zone.now.at_end_of_week.to_s
 
     @period_from = Time.zone.parse(params[:from])
     @period_to = Time.zone.parse(params[:to])
