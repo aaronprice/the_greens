@@ -14,6 +14,8 @@ class Reservation < ActiveRecord::Base
 
   # == Scopes ===============================================================
 
+  scope :future, -> { where("reservations.reserved_at >= CURRENT_TIMESTAMP") }
+
   # == Callbacks ============================================================
 
   # == Class Methods ========================================================

@@ -7,8 +7,8 @@
     %tr
       %th= day.strftime("%A")
       - CalendarService.reservation_intervals(day).each do |time_slot|
-        - if @current_reservations.include?(time_slot.xmlschema)
-          %td.reserved= time_slot.strftime("%l:%M%p").downcase
+        - if time_slot < Time.zone.now || @current_reservations.include?(time_slot.xmlschema)
+          %td.unavailable= time_slot.strftime("%l:%M%p").downcase
         - else
           %td= link_to time_slot.strftime("%l:%M%p").downcase, new_reservation_url(reservation_form: { reserved_at: time_slot } )
 

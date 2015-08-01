@@ -37,5 +37,12 @@ RSpec.describe ReservationsController, type: :controller do
       expect(assigns(:reservation_form).errors.full_messages).to eq(["Reserved at is already taken"])
       expect(response).to render_template(:new)
     end
+
+    it "failure - cannot reserve past times." do
+      post :create, { reservation_form: { name: "Tiger Woods", email: "tiger.woods@test.test", reserved_at: 2.days.ago } }
+      expect(assigns(:reservation_form).errors.full_messages).to eq(["Reserved at cannot be in the past"])
+      expect(response).to render_template(:new)
+    end
+
   end
 end

@@ -4,6 +4,7 @@ class ReservationForm
   attr_accessor :name, :email, :reserved_at, :reservation, :current_user
 
   validates :name, :email, :reserved_at, presence: true
+  validate :reservation_in_future
   validate :reservation_available
 
   def initialize(reservation, params = {}, current_user = nil)
@@ -46,6 +47,13 @@ class ReservationForm
       self.reservation.user = user
       self.reservation.reserved_at = self.reserved_at
       self.reservation.save
+    end
+  end
+
+  def reservation_in_future
+    return true if self.reserved_at.blank?
+    if self.reserved_at < Time.zone.now
+      errors.add(:reserved_at, "cannot be in the past")
     end
   end
 
