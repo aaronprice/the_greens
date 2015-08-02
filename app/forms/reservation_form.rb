@@ -6,6 +6,7 @@ class ReservationForm
   validates :name, :email, :reserved_at, presence: true
   validate :reservation_in_future
   validate :reservation_available
+  validate :reservation_on_the_20_minute_mark
 
   def initialize(reservation, params = {}, current_user = nil)
     self.current_user = current_user
@@ -61,6 +62,16 @@ class ReservationForm
     return true if self.reserved_at.blank?
     if Reservation.exists?(reserved_at: self.reserved_at.to_s(:db))
       errors.add(:reserved_at, "is already taken")
+    end
+  end
+
+  def reservation_on_the_20_minute_mark
+    return true if self.reserved_at.blank?
+    is_minute_correct = [0, 20, 40].include?(self.reserved_at.strftime("%M").to_i)
+    is_seconds_correct = self.reserved_at.strftime("%S").to_i == 0
+
+    if !(is_minute_correct && is_seconds_correct)
+      errors.add(:reserved_at, "must be on the 20 minute mark")
     end
   end
 

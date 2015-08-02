@@ -39,8 +39,18 @@ RSpec.describe ReservationsController, type: :controller do
     end
 
     it "failure - cannot reserve past times." do
-      post :create, { reservation_form: { name: "Tiger Woods", email: "tiger.woods@test.test", reserved_at: 2.days.ago } }
+      t = 2.days.ago
+      reservation_timestamp = Time.new(t.year, t.month, t.day, 12, 20, 0, "-04:00").xmlschema
+      post :create, { reservation_form: { name: "Tiger Woods", email: "tiger.woods@test.test", reserved_at: reservation_timestamp } }
       expect(assigns(:reservation_form).errors.full_messages).to eq(["Reserved at cannot be in the past"])
+      expect(response).to render_template(:new)
+    end
+
+    it "failure - cannot reserve arbitrary times" do
+      t = 2.days.from_now
+      reservation_timestamp = Time.new(t.year, t.month, t.day, 12, 20, 05, "-04:00").xmlschema
+      post :create, { reservation_form: { name: "Tiger Woods", email: "tiger.woods@test.test", reserved_at: reservation_timestamp } }
+      expect(assigns(:reservation_form).errors.full_messages).to eq(["Reserved at must be on the 20 minute mark"])
       expect(response).to render_template(:new)
     end
 
