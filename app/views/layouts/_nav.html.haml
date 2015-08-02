@@ -1,0 +1,7 @@
+= link_to "Reservations", reservations_path
+
+- if current_user
+  = link_to "My Reservations", user_path
+  = link_to "Logout", logout_path
+- else
+  = link_to "Login", new_session_path
