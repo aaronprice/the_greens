@@ -2,11 +2,17 @@
 
 %p Reservations for period: #{@period_from.strftime("%B %-d, %Y")} to #{@period_to.strftime("%B %-d, %Y")}
 
+.nav-links
+  = link_to "Previous Week", reservations_path(from: CalendarService.new(@period_from.to_date).previous_week_from, to: CalendarService.new(@period_from.to_date).previous_week_to)
+  = link_to "Next Week", reservations_path(from: CalendarService.new(@period_from.to_date).next_week_from, to: CalendarService.new(@period_from.to_date).next_week_to)
+
+%br
+
 %table
   - (@period_from.to_date..@period_to.to_date).each do |day|
     %tr
       %th= day.strftime("%A")
-      - CalendarService.reservation_intervals(day).each do |time_slot|
+      - CalendarService.new(day).reservation_intervals.each do |time_slot|
         - if time_slot < Time.zone.now || @current_reservations.include?(time_slot.xmlschema)
           %td.unavailable= time_slot.strftime("%l:%M%p").downcase
         - else
