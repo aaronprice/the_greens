@@ -30,6 +30,10 @@ class Reservation < ActiveRecord::Base
     })
   end
 
+  def self.at_site(site)
+    where(site_id: site.id)
+  end
+
   # == Instance Methods =====================================================
 
 end

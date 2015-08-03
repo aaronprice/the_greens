@@ -1,17 +1,20 @@
 class ReservationForm
   include ActiveModel::Model
 
-  attr_accessor :name, :email, :reserved_at, :reservation, :current_user
+  attr_accessor :name, :email, :reserved_at, :reservation, :current_user, :site
 
   validates :name, :email, :reserved_at, presence: true
   validate :reservation_in_future
   validate :reservation_available
   validate :reservation_on_the_20_minute_mark
+  validate :concurrent_reservations
 
   def initialize(reservation, params = {}, current_user = nil)
     self.current_user = current_user
 
     self.reservation = reservation
+
+    self.site = reservation.site
 
     params = {} if params.nil?
     self.name = params.fetch(:name, current_user.try(:name))
@@ -60,8 +63,7 @@ class ReservationForm
 
   def reservation_available
     return true if self.reserved_at.blank?
-    site = self.reservation.site
-    if site.reservations.exists?(reserved_at: self.reserved_at.to_s(:db))
+    if self.site.reservations.exists?(reserved_at: self.reserved_at.to_s(:db))
       errors.add(:reserved_at, "is already taken")
     end
   end
@@ -73,6 +75,15 @@ class ReservationForm
 
     if !(is_minute_correct && is_seconds_correct)
       errors.add(:reserved_at, "must be on the 20 minute mark")
+    end
+  end
+
+  def concurrent_reservations
+    user = User.find_by(email: self.email)
+    return true if user.blank?
+
+    if user.reservations.future.at_site(self.site).count >= 2
+      errors.add(:email, "can't have more than 2 reservations")
     end
   end
 

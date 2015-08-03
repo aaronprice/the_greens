@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe ReservationsController, type: :controller do
 
   let(:reservation) { reservations(:default) }
+  let(:t) { 2.days.from_now }
 
   it "GET index" do
     get :index, { from: "#{2.days.ago}", to: "#{3.days.from_now}" }
@@ -18,7 +19,6 @@ RSpec.describe ReservationsController, type: :controller do
 
   describe "POST create" do
     it "success" do
-      t = 2.days.from_now
       reservation_timestamp = Time.new(t.year, t.month, t.day, 12, 20, 0, "-04:00").xmlschema
       post :create, { reservation_form: { name: "Tiger Woods", email: "tiger.woods@test.test", reserved_at: reservation_timestamp } }
       expect(response).to redirect_to(reservations_path)
@@ -55,10 +55,17 @@ RSpec.describe ReservationsController, type: :controller do
     end
 
     it "failure - cannot reserve arbitrary times" do
-      t = 2.days.from_now
       reservation_timestamp = Time.new(t.year, t.month, t.day, 12, 20, 05, "-04:00").xmlschema
       post :create, { reservation_form: { name: "Tiger Woods", email: "tiger.woods@test.test", reserved_at: reservation_timestamp } }
       expect(assigns(:reservation_form).errors.full_messages).to eq(["Reserved at must be on the 20 minute mark"])
+      expect(response).to render_template(:new)
+    end
+
+    it "failure - cannot reserve more than twice at the same golf course" do
+      Reservation.create!({ user_id: reservation.user_id, site_id: reservation.site_id, reserved_at: Time.new(t.year, t.month, t.day, 2, 00, 0, "-04:00").xmlschema })
+
+      post :create, { reservation_form: { name: reservation.user.name, email: reservation.user.email, reserved_at: Time.new(t.year, t.month, t.day, 2, 20, 0, "-04:00").xmlschema } }
+      expect(assigns(:reservation_form).errors.full_messages).to eq(["Email can't have more than 2 reservations"])
       expect(response).to render_template(:new)
     end
 
