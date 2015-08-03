@@ -4,7 +4,7 @@ class ReservationsController < ApplicationController
   before_filter :build_reservation_form, only: [:new, :create]
 
   def index
-    @current_reservations = Reservation.future.for_period(@period_from, @period_to).collect{ |record| record.reserved_at.xmlschema }
+    @current_reservations = @site.reservations.future.for_period(@period_from, @period_to).collect{ |record| record.reserved_at.xmlschema }
   end
 
   def new
@@ -25,7 +25,7 @@ class ReservationsController < ApplicationController
 private
 
   def build_reservation_form
-    @reservation_form = ReservationForm.new(Reservation.new, allowed_params[:reservation_form], current_user)
+    @reservation_form = ReservationForm.new(@site.reservations.new, allowed_params[:reservation_form], current_user)
   end
 
   def allowed_params

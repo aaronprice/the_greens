@@ -23,5 +23,8 @@ module TheGreens
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # Redirects requests with no subdomain to www.
+    config.middleware.insert 0, "SubdomainRedirect"
   end
 end

@@ -5,3 +5,11 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Site.create!([
+  { slug: "pipersheath", name: "Piper's Heath Golf Course"},
+  { slug: "ospreyvalley", name: "Osprey Valley Golf Course"},
+  { slug: "pheasantrun", name: "Pheasant Run Golf Course"},
+  { slug: "eaglesnest", name: "Eagles Nest Golf Course"},
+  { slug: "hockleyvalley", name: "Hockley Valley Golf Course"}
+])

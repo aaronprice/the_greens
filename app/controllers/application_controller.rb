@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
 
+  before_filter :load_site_from_subdomain
+
   def login_as(user)
     session[:auth_token] = user.email
     current_user
@@ -22,5 +24,11 @@ class ApplicationController < ActionController::Base
     if current_user.blank?
       redirect_to new_session_path
     end
+  end
+
+  def load_site_from_subdomain
+    @site = Site.find_by!(slug: request.subdomain)
+  rescue ActiveRecord::RecordNotFound
+    raise ActionController::RoutingError.new('Not Found')
   end
 end
