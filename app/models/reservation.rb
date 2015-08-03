@@ -36,4 +36,8 @@ class Reservation < ActiveRecord::Base
 
   # == Instance Methods =====================================================
 
+  def is_within_one_hour?
+    1.hour.from_now < self.reserved_at
+  end
+
 end
