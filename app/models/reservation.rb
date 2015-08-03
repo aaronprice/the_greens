@@ -17,6 +17,8 @@ class Reservation < ActiveRecord::Base
 
   # == Scopes ===============================================================
 
+  default_scope { order("reservations.reserved_at ASC") }
+
   scope :future, -> { where("reservations.reserved_at >= CURRENT_TIMESTAMP") }
 
   # == Callbacks ============================================================
