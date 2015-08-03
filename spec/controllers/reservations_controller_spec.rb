@@ -24,6 +24,14 @@ RSpec.describe ReservationsController, type: :controller do
       expect(response).to redirect_to(reservations_path)
     end
 
+    it "success - at different site" do
+      site = Site.create!({ slug: "location-too", name: "Another Golf Course" })
+      request.host = "#{site.slug}.test.host"
+
+      post :create, { reservation_form: { name: "Tiger Woods", email: "tiger.woods@test.test", reserved_at: reservation.reserved_at } }
+      expect(response).to redirect_to(reservations_path)
+    end
+
     it "failure" do
       post :create
       expect(response).to render_template(:new)

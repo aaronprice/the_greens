@@ -60,7 +60,8 @@ class ReservationForm
 
   def reservation_available
     return true if self.reserved_at.blank?
-    if Reservation.exists?(reserved_at: self.reserved_at.to_s(:db))
+    site = self.reservation.site
+    if site.reservations.exists?(reserved_at: self.reserved_at.to_s(:db))
       errors.add(:reserved_at, "is already taken")
     end
   end
