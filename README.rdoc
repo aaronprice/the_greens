@@ -38,3 +38,38 @@ Acceptance criteria:
 
 * A given user should only be able to have a maximum of 2 concurrent bookings.
 * Bookings can't be canceled when they start less than an hour from the current time.
+
+
+
+= Requirements
+
+- Pow
+- Postgres
+- Ruby
+
+== Install
+
+git clone git@github.com:aaronprice/the_greens.git
+cd the_greens
+Create your config/database.yml
+gem install bundler
+bundle
+rake db:migrate
+
+As of Iteration 2, you'll need
+rake db:seed
+
+I've tagged the iterations so you can check them out separately.
+
+
+== Notes
+
+I've taken heart to the phrase "This is not a design assignment". The UI is terrible, but it is functional.
+
+I chosen deliberatly not to have passwords for users. Simply because when you're testing on the front end, it's much easier without the hassle of a password. In a production environment, this would not be the case.
+
+I deliberately used validation in the form for the reservation because business logic and data integrity logic are different.
+
+I'll be happy to answer any other question you might have.
+
+Also, I'd love your feedback on the assignment in general. What you liked, didn't like. Anything, really.
