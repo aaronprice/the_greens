@@ -1,10 +1,10 @@
 == Rails Assignment
 
-Scenario
+==== Scenario
 
 Your team is working with a golf club management company. As part of an enterprise-wide update the company would like a Rails app for booking tee times at their various clubs. Your job is to prototype the application over several iterations. Acceptance criteria will be provided for each iteration.
 
-Your Deliverable
+==== Your Deliverable
 
 This is not a design assignment. While the app should be usable, it needn't look pretty. If you wish to use something like Twitter Boostrap that's perfectly acceptable.
 
@@ -49,15 +49,19 @@ Acceptance criteria:
 
 == Install
 
-git clone git@github.com:aaronprice/the_greens.git
-cd the_greens
-Create your config/database.yml
-gem install bundler
-bundle
-rake db:migrate
+    git clone git@github.com:aaronprice/the_greens.git
+    cd the_greens
+    # Create your config/database.yml
+    gem install bundler
+    bundle
+    rake db:migrate
+    # Symlink the app to Pow
+    cd ~/.pow
+    ln -s /path/to/the_greens thegreens
+    # Go to your browser and navigate to http://www.thegreens.dev/
 
 As of Iteration 2, you'll need
-rake db:seed
+    rake db:seed
 
 I've tagged the iterations so you can check them out separately.
 
